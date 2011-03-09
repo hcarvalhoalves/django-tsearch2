@@ -207,12 +207,14 @@ create language plpythonu;
 create or replace function norm_text_utf8 (str varchar)
   returns varchar
 as $$
+
 from unicodedata import normalize, category
 
-norm_str = normalize('NFKD', str.decode('utf-8'))
 return u''.join((
-    c for c in norm_str if not category(c) == 'Mn'
-))
+    c for c in normalize('NFKD', str.decode('utf-8'))
+    if not category(c) == 'Mn'
+)).encode('utf-8')
+
 $$ language plpythonu
 """
 
