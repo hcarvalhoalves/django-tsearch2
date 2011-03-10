@@ -1,3 +1,5 @@
+# coding: utf-8
+
 __test__ = {"doctest": """
 >>> from tsearch2_test.models import Book
 
@@ -22,4 +24,7 @@ __test__ = {"doctest": """
 
 >>> Book.objects.search("chicken")
 []
+
+>>> Book.objects.create(title=u"Testing Unicode", author=u"Renè Gonçalves", preface=u"Pretty International.")
+<Book: Testing Unicode>
 """}

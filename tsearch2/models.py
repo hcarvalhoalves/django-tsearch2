@@ -204,16 +204,18 @@ drop language if exists plpythonu cascade;
 
 create language plpythonu;
 
-create or replace function norm_text_utf8 (str varchar)
+create or replace function norm_text_utf8 (string varchar)
   returns varchar
 as $$
 
 from unicodedata import normalize, category
 
-return u''.join((
-    c for c in normalize('NFKD', str.decode('utf-8'))
-    if not category(c) == 'Mn'
-)).encode('utf-8')
+return unicode(
+    filter(
+        lambda c: category(c) != 'Mn',
+        normalize('NFKD', string.decode('utf-8'))
+    )
+).encode('utf-8')
 
 $$ language plpythonu
 """
