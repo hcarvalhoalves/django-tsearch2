@@ -204,7 +204,7 @@ drop language if exists plpythonu cascade;
 
 create language plpythonu;
 
-create or replace function norm_text_utf8 (string varchar)
+create or replace function norm_text_utf8 (string text)
   returns varchar
 as $$
 
