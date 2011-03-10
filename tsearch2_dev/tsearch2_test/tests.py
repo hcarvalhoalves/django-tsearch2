@@ -25,6 +25,6 @@ __test__ = {"doctest": """
 >>> Book.objects.search("chicken")
 []
 
->>> Book.objects.create(title=u"Testing Unicode", author=u"Renè Gonçalves", preface=u"Pretty International.")
+>>> Book.objects.create(title=u"Testing Unicode", author=u"Renè Gonçalves", preface=u"Pretty Unicode \u2013 with a dash.")
 <Book: Testing Unicode>
 """}
