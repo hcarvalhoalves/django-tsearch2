@@ -164,7 +164,6 @@ class SearchManager(models.Manager):
 
         cursor = connection.cursor()
         cursor.execute(sql)
-        cursor.execute(u"COMMIT;")
         cursor.close()
 
     def search(self, *args, **kwargs):
