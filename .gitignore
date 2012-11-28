@@ -2,4 +2,5 @@
 *.komodoproject
 *.sublime*
 *.egg-info
-build
+dist/
+build/
