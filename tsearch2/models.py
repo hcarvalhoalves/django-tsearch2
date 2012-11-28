@@ -11,9 +11,8 @@ http://djangosnippets.org/snippets/1328/
 
 from django.db import models
 from django.db import connection
-from django.db.models.signals import post_syncdb
+
 from fields import VectorField
-import os
 
 
 def quote_name(s):
@@ -36,7 +35,7 @@ class SearchQuerySet(models.query.QuerySet):
         search_manager = self.model.get_search_manager()
         vector_field = quote_name(search_manager.vector_field.column)
         tsquery = u"""
-        plainto_tsquery(%s, norm_text_utf8(%s))
+        plainto_tsquery(%s, unaccent(%s))
         """
 
         select, select_params, order = {}, [], []
@@ -96,7 +95,7 @@ class SearchManager(models.Manager):
 
     def _get_tsvector_sql(self, field_name, weight=None):
         sql_template = u"""
-        setweight(to_tsvector('%s', coalesce(norm_text_utf8(%s), '')), '%s')
+        setweight(to_tsvector('%s', coalesce(unaccent(%s), '')), '%s')
         """
 
         field, model, direct, m2m = self.model._meta.get_field_by_name(field_name)
@@ -196,32 +195,3 @@ class SearchableModel(models.Model):
         super(SearchableModel, self).save(*args, **kwargs)
         if should_update_index:
             self.update_index()
-
-
-SQL_NORMALIZATION_FUNCTION = u"""
-drop language if exists plpythonu cascade;
-
-create language plpythonu;
-
-create or replace function norm_text_utf8 (string text)
-  returns varchar
-as $$
-
-from unicodedata import normalize, category
-
-return unicode(
-    filter(
-        lambda c: category(c) != 'Mn',
-        normalize('NFKD', string.decode('utf-8'))
-    )
-).encode('utf-8')
-
-$$ language plpythonu
-"""
-
-def create_normalization_function(sender, **kwargs):
-    cursor = connection.cursor()
-    cursor.execute(SQL_NORMALIZATION_FUNCTION)
-
-
-post_syncdb.connect(create_normalization_function)

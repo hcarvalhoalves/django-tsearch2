@@ -1,7 +1,7 @@
 # coding: utf-8
 
 __test__ = {"doctest": """
->>> from tsearch2_test.models import Book
+>>> from testsuite.tsearch2_default.models import Book
 
 >>> Book.objects.create(title=u"The Mythical Man Month", author=u"Fred Brooks", preface=u"Essays in Software Engineering")
 <Book: The Mythical Man Month>
@@ -14,17 +14,16 @@ __test__ = {"doctest": """
 
 >>> Book.objects.update_index()
 
->>> Book.objects.update_index(pk=[1, 2])
-
 >>> Book.objects.search("brooks")
 [<Book: The Mythical Man Month>]
 
->>> Book.objects.search("pattern")
-[<Book: Pattern: (Math Counts)>, <Book: Design Patterns>]
+>>> sorted(Book.objects.search("pattern"))
+[<Book: Design Patterns>, <Book: Pattern: (Math Counts)>]
+
+>> Book.objects.search("henry")
+[<Book: Pattern: (Math Counts)>]
 
 >>> Book.objects.search("chicken")
 []
 
->>> Book.objects.create(title=u"Testing Unicode", author=u"Renè Gonçalves", preface=u"Pretty Unicode \u2013 with a dash.")
-<Book: Testing Unicode>
 """}

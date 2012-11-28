@@ -17,7 +17,7 @@ class VectorField(models.Field):
         })
         super(VectorField, self).__init__(*args, **kwargs)
 
-    def db_type(self, connection):
+    def db_type(self, *args, **kwargs):
         return 'tsvector'
 
 
