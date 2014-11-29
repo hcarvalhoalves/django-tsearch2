@@ -148,21 +148,19 @@ class SearchManager(models.Manager):
             # If one or more pks are specified, tack a WHERE clause onto the SQL.
             if pk is not None:
                 if hasattr(pk, '__iter__'):
-                    ids = u','.join([unicode(v) for v in pk])
+                    values = [tuple(pk)]
                 else:
-                    ids = pk
-                where = u"WHERE %s IN (%s)" % (
-                    quote_name(model._meta.pk.column), ids
-                )
+                    values = [tuple([pk])]
+                where = u"WHERE %s IN %%s" % quote_name(model._meta.pk.column)
             else:
                 where = ''
+                values = None
 
             sql = u"UPDATE %s SET %s = %s %s;" % (
-                quote_name(model._meta.db_table), quote_name(self.vector_field.column), tsvector_sql, where,
-            )
+                quote_name(model._meta.db_table), quote_name(self.vector_field.column), tsvector_sql, where)
 
         cursor = connection.cursor()
-        cursor.execute(sql)
+        cursor.execute(sql, values)
         cursor.close()
 
     def search(self, *args, **kwargs):
