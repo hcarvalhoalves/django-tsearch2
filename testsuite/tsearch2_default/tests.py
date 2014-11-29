@@ -34,6 +34,10 @@ __test__ = {"doctest": """
 >>> Book.objects.search("chicken")
 []
 
+>>> Book.objects.update_index()
+
+>>> Book.objects.update_index(pk=[1,2,3])
+
 >>> ISBNBook.objects.create(isbn="85-359-0277-5", title=u"The Mythical Man Month", author=u"Fred Brooks", preface=u"Essays in Software Engineering")
 <ISBNBook: The Mythical Man Month>
 
@@ -56,5 +60,9 @@ __test__ = {"doctest": """
 
 >>> ISBNBook.objects.search("chicken")
 []
+
+>>> ISBNBook.objects.update_index()
+
+>>> ISBNBook.objects.update_index(pk=["85-359-0277-5", "1-84356-028-3", "0-684-84328-5"])
 
 """}
