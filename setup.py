@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "django-tsearch2",
-    version = "0.4.0",
+    version = "0.4.1",
     url = "http://github.com/hcarvalhoalves/django-tsearch2",
     description = "Postgresql's full text search support for Django",
     author = "Henrique Carvalho Alves",
